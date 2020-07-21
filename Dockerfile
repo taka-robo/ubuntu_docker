@@ -1,20 +1,16 @@
 # 仮想化するベースOS
-FROM ubuntu:18.04
+FROM dorowu/ubuntu-desktop-lxde-vnc:bionic
+#FROM ubuntu:18.04
 
 MAINTAINER taka
 
 # install sudo
-RUN apt-get update && apt-get install -y sudo
+RUN apt-get update -q && \
+    apt-get upgrade -yq && \
+    apt-get install -y sudo
 # add user
-RUN groupadd -g 1000 developer && \
-    useradd -g developer -G sudo -m -s /bin/bash input && \
-    echo 'input:input' | chpasswd
+RUN useradd --create-home --home-dir /home/ubuntu --shell /bin/bash --user-group --groups adm,sudo ubuntu && \
+    echo ubuntu:ubuntu | chpasswd && \
+    echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-WORKDIR /home/input
-RUN echo 'Defaults visiblepw'             >> /etc/sudoers
-RUN echo 'iganari ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-RUN apt-get install -y \
-    ubuntu-desktop\
-    novnc websockify python-numpy
-
-USER input
+ENV USER ubuntu
