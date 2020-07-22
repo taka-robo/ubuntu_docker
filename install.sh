@@ -16,4 +16,7 @@ sudo apt install -y \
     make \
     g++ \
     unzip \
-    libprotobuf-dev protobuf-compiler 
+    libprotobuf-dev protobuf-compiler \
+
+#boost install
+cd && git clone --recursive https://github.com/boostorg/boost.git
